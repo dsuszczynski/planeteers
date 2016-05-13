@@ -1,0 +1,2 @@
+# planeteers
+Planeteers CLI game
