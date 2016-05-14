@@ -20,6 +20,10 @@ public class PlayerUtil {
     private static PlayerUtil instance;
     private static ResourceBundle resourceBundle;
 
+    /**
+     * Use properties resource: PlayersDefaultValues.properties
+     * @throws PlayersDefaultValuesException
+     */
     private PlayerUtil() throws PlayersDefaultValuesException {
 
         try {
@@ -76,13 +80,27 @@ public class PlayerUtil {
      */
     private void configure(Player player, DifficultyLevelType difficultyLevelType) throws PlayersDefaultValuesException {
 
-        String resourceKey = "character.positive." + player.getCharacterType() + ".strength.difficulty." + difficultyLevelType;
+        String resourceStrengthKey = "character.positive." + player.getCharacterType() + ".strength";
         try {
-            String strength = resourceBundle.getString(resourceKey);
+            String strength = resourceBundle.getString(resourceStrengthKey);
             player.setStrength(Integer.parseInt(strength));
 
         } catch (MissingResourceException e) {
-            LOGGER.error("Resource key not found!", e);
+            LOGGER.error("Resource key: '" + resourceStrengthKey + "' not found!", e);
+            throw new PlayersDefaultValuesException("Resource key not found!");
+
+        } catch (NumberFormatException e) {
+            LOGGER.error(e);
+            throw new PlayersDefaultValuesException("Resource format invalid!");
+        }
+
+        String resourceLifeKey = "character.positive." + player.getCharacterType() + ".life.difficulty." + difficultyLevelType;
+        try {
+            String life = resourceBundle.getString(resourceLifeKey);
+            player.setLife(Integer.parseInt(life));
+
+        } catch (MissingResourceException e) {
+            LOGGER.error("Resource key: '" + resourceLifeKey + "' not found!", e);
             throw new PlayersDefaultValuesException("Resource key not found!");
 
         } catch (NumberFormatException e) {

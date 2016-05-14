@@ -15,7 +15,6 @@
         <module>commons</module>
         <module>game</module>
         <module>data</module>
-        <module>service</module>
     </modules>
 
     <properties>
@@ -40,7 +39,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>planeteers</finalName>
+        <finalName>planeteers-${project.version}</finalName>
 
         <pluginManagement>
             <plugins>

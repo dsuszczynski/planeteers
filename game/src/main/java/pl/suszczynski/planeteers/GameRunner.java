@@ -28,16 +28,18 @@ public class GameRunner {
                 ConsoleUtil.writeError(e.getMessage());
             }
 
+            /* Gaia say hello :) */
+            ConsoleUtil.writeGaia("Hello " + gameState.getMainPlayer().getName() + "! I am your guide :)");
+
             for (Player player : gameState.getPlayers()) {
 
-                if (PositiveCharacterType.GAIA.equals(player.getCharacterType())) {
-                    ConsoleUtil.write(player, "Hello " + gameState.getMainPlayer().getName() + "! I am your guide :)");
-
-                } else if (PositiveCharacterType.CAPTAIN_PLANET.equals(player.getCharacterType())) {
-                    ConsoleUtil.write(player, "Hey " + gameState.getMainPlayer().getName() + "! By your powers combined, I am Captain Planet! Always ready to save you :)");
+                if (PositiveCharacterType.CAPTAIN_PLANET.equals(player.getCharacterType())) {
+                    ConsoleUtil.write(player, "Hey " + gameState.getMainPlayer().getName()
+                            + "! By your powers combined, I am Captain Planet! Always ready to save you :)");
 
                 } else if (player != gameState.getMainPlayer()) {
-                    ConsoleUtil.write(player, "Hi " + gameState.getMainPlayer().getName() + "! My power is: " + player.getCharacterType().getPowerType());
+                    ConsoleUtil.write(player, "Hi " + gameState.getMainPlayer().getName()
+                            + "! My power is: " + player.getCharacterType().getPowerType());
                 }
             }
 

@@ -8,16 +8,17 @@ package pl.suszczynski.planeteers.data;
  * Created by daniel on 14.05.16.
  */
 public enum PositiveCharacterType implements Characterable {
-    GAIA("Gaia", null, ColorType.WHITE),
-    CAPTAIN_PLANET("Captain Planet", null, ColorType.WHITE),
+    CAPTAIN_PLANET("Captain Planet", "CP", null, ColorType.WHITE),
 
-    KWAME("Kwame", PowerType.EARTH, ColorType.GREEN),
-    WHEELER("Wheeler", PowerType.FIRE, ColorType.YELLOW),
-    LINKA("Linka", PowerType.WIND, ColorType.CYAN),
-    GI("Kwame", PowerType.WATER, ColorType.BLUE),
-    MATI("Ma-Ti", PowerType.HEART, ColorType.RED);
+    KWAME("Kwame", "K",PowerType.EARTH, ColorType.GREEN),
+    WHEELER("Wheeler", "W", PowerType.FIRE, ColorType.YELLOW),
+    LINKA("Linka", "L", PowerType.WIND, ColorType.CYAN),
+    GI("Gi", "G", PowerType.WATER, ColorType.BLUE),
+    MATI("Ma-Ti", "M", PowerType.HEART, ColorType.RED);
 
     private String name;
+
+    private String cliShortcut;
 
     /* One of a five powers given by Gaia */
     private PowerType powerType;
@@ -25,8 +26,9 @@ public enum PositiveCharacterType implements Characterable {
     /* ColorType used for display on CLI */
     private ColorType colorType;
 
-    PositiveCharacterType(String name, PowerType powerType, ColorType colorType) {
+    PositiveCharacterType(String name, String cliShortcut, PowerType powerType, ColorType colorType) {
         this.name = name;
+        this.cliShortcut = cliShortcut;
         this.powerType = powerType;
         this.colorType = colorType;
     }
@@ -46,5 +48,9 @@ public enum PositiveCharacterType implements Characterable {
     @Override
     public ColorType getColorType() {
         return colorType;
+    }
+
+    public String getCliShortcut() {
+        return cliShortcut;
     }
 }

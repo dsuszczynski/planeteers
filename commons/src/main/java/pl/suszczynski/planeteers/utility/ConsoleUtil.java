@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import pl.suszczynski.planeteers.data.ColorType;
 import pl.suszczynski.planeteers.data.Player;
 
+import static java.lang.System.out;
+
 /**
  * {@link ConsoleUtil} is a utility class responsible for preparation a console output in perspicuous way.
  *
@@ -29,25 +31,43 @@ public class ConsoleUtil {
     }
 
     /**
+     * Gaia is a guide and narrator in a game.
+     *
+     * @param statement
+     */
+    public static void writeGaia(String statement) {
+        out.println(ColorType.WHITE + BOLD + "Gaia: " + RESET + statement);
+    }
+
+    /**
      * This method write directly on CLI what Player wants to say.
      *
      * @param player
      * @param statement - sentence which Player wants to say
      */
     public static void write(Player player, String statement) {
-        System.out.print(player.getCharacterType().getColorType() + (player.getName() != null ? player.getName() : player.getCharacterType().getName()) + ": ");
-        System.out.println(RESET + statement);
+        StringBuilder intro = new StringBuilder();
+        intro.append(player.getCharacterType().getColorType())
+                .append(player.getName() != null ? player.getName() : player.getCharacterType().getName());
+
+        if (player.getCharacterType().getCliShortcut() != null) {
+            intro.append(" (").append(player.getCharacterType().getCliShortcut()).append("): ");
+        } else {
+            intro.append(": ");
+        }
+
+        out.println(intro + RESET + statement);
     }
 
     /**
      * Write welcome on CLI to greet new Player.
      */
     public static void writeWelcome() {
-        System.out.println(BOLD + "WELCOME IN " + UNDERLINE + "Captain Planet and the Planeteers" + RESET + " CLI game!");
+        out.println(BOLD + "WELCOME IN " + UNDERLINE + "Captain Planet and the Planeteers" + RESET + " CLI game!");
     }
 
     public static void writeError(String message) {
-        System.out.println(ColorType.RED + BOLD + "ERROR: " + PRIMARY + ColorType.RED + message + RESET);
+        out.println(ColorType.RED + BOLD + "ERROR: " + PRIMARY + ColorType.RED + message + RESET);
     }
 
 }

@@ -12,7 +12,8 @@ public class Player implements Serializable {
 
     private PositiveCharacterType characterType;
 
-    private Integer strength = 0;
+    private Integer strength;
+    private Integer life;
 
     public Player(String name, PositiveCharacterType characterType) {
         this(characterType);
@@ -38,5 +39,13 @@ public class Player implements Serializable {
 
     public void setStrength(Integer strength) {
         this.strength = strength;
+    }
+
+    public Integer getLife() {
+        return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
     }
 }
