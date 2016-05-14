@@ -1,3 +1,7 @@
+*.iml
+/log4j-application.log
+/.idea
+
 *.class
 
 # Mobile Tools for Java (J2ME)
