@@ -2,8 +2,9 @@ package pl.suszczynski.planeteers.utility;
 
 import org.apache.log4j.Logger;
 import pl.suszczynski.planeteers.data.DifficultyLevelType;
-import pl.suszczynski.planeteers.data.Player;
-import pl.suszczynski.planeteers.data.PositiveCharacterType;
+import pl.suszczynski.planeteers.data.player.MainPlayer;
+import pl.suszczynski.planeteers.data.player.Player;
+import pl.suszczynski.planeteers.data.player.PositiveCharacterType;
 import pl.suszczynski.planeteers.exception.PlayersDefaultValuesException;
 
 import java.util.MissingResourceException;
@@ -53,7 +54,13 @@ public class PlayerUtil {
      * @return
      */
     public static Player create(String name, PositiveCharacterType characterType, DifficultyLevelType difficultyLevelType) throws PlayersDefaultValuesException {
-        Player player = new Player(name, characterType);
+        Player player = null;
+
+        if (name != null) {
+            player = new MainPlayer(name, characterType);
+        } else {
+            player = new Player(characterType);
+        }
 
         getInstance().configure(player, difficultyLevelType);
 
@@ -73,26 +80,12 @@ public class PlayerUtil {
 
     /**
      * Fill-out missing information in Player object.
-     * Those information are read from property file based on chosen difficulty level.
+     * Those information are readCommand from property file based on chosen difficulty level.
      *
      * @param player
      * @param difficultyLevelType
      */
     private void configure(Player player, DifficultyLevelType difficultyLevelType) throws PlayersDefaultValuesException {
-
-        String resourceStrengthKey = "character.positive." + player.getCharacterType() + ".strength";
-        try {
-            String strength = resourceBundle.getString(resourceStrengthKey);
-            player.setStrength(Integer.parseInt(strength));
-
-        } catch (MissingResourceException e) {
-            LOGGER.error("Resource key: '" + resourceStrengthKey + "' not found!", e);
-            throw new PlayersDefaultValuesException("Resource key not found!");
-
-        } catch (NumberFormatException e) {
-            LOGGER.error(e);
-            throw new PlayersDefaultValuesException("Resource format invalid!");
-        }
 
         String resourceLifeKey = "character.positive." + player.getCharacterType() + ".life.difficulty." + difficultyLevelType;
         try {

@@ -3,8 +3,8 @@ package pl.suszczynski.planeteers.utility;
 import org.apache.log4j.Logger;
 import pl.suszczynski.planeteers.data.DifficultyLevelType;
 import pl.suszczynski.planeteers.data.GameState;
-import pl.suszczynski.planeteers.data.Player;
-import pl.suszczynski.planeteers.data.PositiveCharacterType;
+import pl.suszczynski.planeteers.data.enemy.NegativeCharacterType;
+import pl.suszczynski.planeteers.data.player.PositiveCharacterType;
 import pl.suszczynski.planeteers.exception.PlayersDefaultValuesException;
 
 /**
@@ -21,16 +21,21 @@ public class GameStateUtil {
         GameState gameState = new GameState();
         gameState.setDifficultyLevelType(difficultyLevelType);
 
+        // create positive characters - Players
         for (PositiveCharacterType characterType : PositiveCharacterType.values()) {
             if (characterType.equals(mainCharacterType)) {
-                gameState.getPlayers().add(
-                        PlayerUtil.create(mainPlayerName, characterType, difficultyLevelType)
-                );
+                gameState.getPlayers().put(characterType.getCliShortcut(),
+                        PlayerUtil.create(mainPlayerName, characterType, difficultyLevelType));
             } else {
-                gameState.getPlayers().add(
-                        PlayerUtil.create(characterType, difficultyLevelType)
-                );
+                gameState.getPlayers().put(characterType.getCliShortcut(),
+                        PlayerUtil.create(characterType, difficultyLevelType));
             }
+        }
+
+        // create negative characters - Enemies
+        for (NegativeCharacterType characterType : NegativeCharacterType.values()) {
+            gameState.getEnemies().put(characterType.getCliShortcut(),
+                    EnemyUtil.create(characterType));
         }
 
         return gameState;

@@ -1,14 +1,15 @@
 package pl.suszczynski.planeteers;
 
-import jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType;
 import pl.suszczynski.planeteers.data.DifficultyLevelType;
 import pl.suszczynski.planeteers.data.GameState;
-import pl.suszczynski.planeteers.data.PositiveCharacterType;
-import pl.suszczynski.planeteers.data.Player;
+import pl.suszczynski.planeteers.data.player.PositiveCharacterType;
+import pl.suszczynski.planeteers.data.player.Player;
+import pl.suszczynski.planeteers.exception.ConsoleMessagesException;
 import pl.suszczynski.planeteers.exception.PlayersDefaultValuesException;
 import pl.suszczynski.planeteers.utility.ConsoleUtil;
 import pl.suszczynski.planeteers.utility.GameStateUtil;
-import pl.suszczynski.planeteers.utility.PlayerUtil;
+
+import java.util.Map;
 
 /**
  * Created by daniel on 13.05.16.
@@ -18,9 +19,10 @@ public class GameRunner {
     public static void main(String[] args) {
         GameState gameState = null;
 
-        ConsoleUtil.writeWelcome();
-
         try {
+            ConsoleUtil.writeWelcome();
+
+            ConsoleUtil.readCommand(gameState);
 
             try {
                 gameState = GameStateUtil.create("Hania", PositiveCharacterType.KWAME, DifficultyLevelType.MEDIUM);
@@ -29,19 +31,25 @@ public class GameRunner {
             }
 
             /* Gaia say hello :) */
-            ConsoleUtil.writeGaia("Hello " + gameState.getMainPlayer().getName() + "! I am your guide :)");
+            ConsoleUtil.writeGaia("Hello " + gameState.getMainPlayer().getName() + "! I am your guide :)\n");
 
-            for (Player player : gameState.getPlayers()) {
+            for (Map.Entry<String, Player> entry : gameState.getPlayers().entrySet()) {
 
-                if (PositiveCharacterType.CAPTAIN_PLANET.equals(player.getCharacterType())) {
-                    ConsoleUtil.write(player, "Hey " + gameState.getMainPlayer().getName()
+                if (PositiveCharacterType.CAPTAIN_PLANET.equals(entry.getValue().getCharacterType())) {
+                    ConsoleUtil.write(entry.getValue(), "Hey " + gameState.getMainPlayer().getName()
                             + "! By your powers combined, I am Captain Planet! Always ready to save you :)");
 
-                } else if (player != gameState.getMainPlayer()) {
-                    ConsoleUtil.write(player, "Hi " + gameState.getMainPlayer().getName()
-                            + "! My power is: " + player.getCharacterType().getPowerType());
+                } else if (entry.getValue() != gameState.getMainPlayer()) {
+                    ConsoleUtil.write(entry.getValue(), "Hi " + gameState.getMainPlayer().getName()
+                            + "! My power is: " + entry.getValue().getCharacterType().getPowerType());
                 }
             }
+
+            ConsoleUtil.writeGaia("As you know your power is: " + gameState.getMainPlayer().getCharacterType().getPowerType());
+            ConsoleUtil.writeGaia("Let's start the game. Good luck!");
+
+        } catch (ConsoleMessagesException e) {
+            ConsoleUtil.writeError(e.getMessage());
 
         } catch (Exception e) {
             ConsoleUtil.writeError("Something went wrong, sorry for inconvenience!");
