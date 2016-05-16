@@ -1,21 +1,20 @@
-package pl.suszczynski.planeteers.data.enemy;
+package pl.suszczynski.planeteers.data.character.negative;
 
-import pl.suszczynski.planeteers.data.Characterable;
-import pl.suszczynski.planeteers.data.ColorType;
-import pl.suszczynski.planeteers.data.player.PositiveCharacterType;
+import pl.suszczynski.planeteers.data.character.Characterable;
+import pl.suszczynski.planeteers.data.character.ColorType;
 
 import java.io.Serializable;
 
 /**
  * Created by daniel on 14.05.16.
  */
-public class Enemy implements Serializable, Characterable {
+public abstract class NegativeCharacter implements Serializable, Characterable {
 
     private NegativeCharacterType characterType;
     private Integer strength;
     private Integer life;
 
-    public Enemy(NegativeCharacterType characterType) {
+    public NegativeCharacter(NegativeCharacterType characterType) {
         this.characterType = characterType;
         this.strength = characterType.getStrength();
         this.life = characterType.getLife();
@@ -34,6 +33,10 @@ public class Enemy implements Serializable, Characterable {
     @Override
     public Integer getLife() {
         return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
     }
 
     @Override

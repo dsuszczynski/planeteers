@@ -1,4 +1,4 @@
-package pl.suszczynski.planeteers;
+package pl.suszczynski.planeteers.helper;
 
 import org.apache.commons.lang3.StringUtils;
 

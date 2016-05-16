@@ -1,13 +1,13 @@
 package pl.suszczynski.planeteers;
 
-import pl.suszczynski.planeteers.data.DifficultyLevelType;
-import pl.suszczynski.planeteers.data.GameState;
-import pl.suszczynski.planeteers.data.player.PositiveCharacterType;
-import pl.suszczynski.planeteers.data.player.Player;
+import pl.suszczynski.planeteers.data.character.positive.PositiveCharacter;
+import pl.suszczynski.planeteers.data.game.GameDifficultyType;
+import pl.suszczynski.planeteers.data.game.Game;
+import pl.suszczynski.planeteers.data.character.positive.PositiveCharacterType;
 import pl.suszczynski.planeteers.exception.ConsoleMessagesException;
-import pl.suszczynski.planeteers.exception.PlayersDefaultValuesException;
-import pl.suszczynski.planeteers.utility.ConsoleUtil;
-import pl.suszczynski.planeteers.utility.GameStateUtil;
+import pl.suszczynski.planeteers.exception.PositiveCharacterDefaultValuesException;
+import pl.suszczynski.planeteers.helper.ConsoleHelper;
+import pl.suszczynski.planeteers.utility.GameUtils;
 
 import java.util.Map;
 
@@ -17,42 +17,43 @@ import java.util.Map;
 public class GameRunner {
 
     public static void main(String[] args) {
-        GameState gameState = null;
+        Game game = null;
 
         try {
-            ConsoleUtil.writeWelcome();
+            ConsoleHelper.writeWelcome();
 
-            ConsoleUtil.readCommand(gameState);
+            ConsoleHelper.readCommand(game);
 
             try {
-                gameState = GameStateUtil.create("Hania", PositiveCharacterType.KWAME, DifficultyLevelType.MEDIUM);
-            } catch (PlayersDefaultValuesException e) {
-                ConsoleUtil.writeError(e.getMessage());
+                game = new Game();
+                game = GameUtils.configure(game, "Hania", PositiveCharacterType.KWAME, GameDifficultyType.MEDIUM);
+            } catch (PositiveCharacterDefaultValuesException e) {
+                ConsoleHelper.writeError(e.getMessage());
             }
 
             /* Gaia say hello :) */
-            ConsoleUtil.writeGaia("Hello " + gameState.getMainPlayer().getName() + "! I am your guide :)\n");
+            ConsoleHelper.writeGaia("Hello " + game.getPlayer().getName() + "! I am your guide :)\n");
 
-            for (Map.Entry<String, Player> entry : gameState.getPlayers().entrySet()) {
+            for (Map.Entry<PositiveCharacterType, PositiveCharacter> entry : game.getPositiveCharacters().entrySet()) {
 
                 if (PositiveCharacterType.CAPTAIN_PLANET.equals(entry.getValue().getCharacterType())) {
-                    ConsoleUtil.write(entry.getValue(), "Hey " + gameState.getMainPlayer().getName()
+                    ConsoleHelper.write(entry.getValue(), "Hey " + game.getPlayer().getName()
                             + "! By your powers combined, I am Captain Planet! Always ready to save you :)");
 
-                } else if (entry.getValue() != gameState.getMainPlayer()) {
-                    ConsoleUtil.write(entry.getValue(), "Hi " + gameState.getMainPlayer().getName()
+                } else if (entry.getValue() != game.getPlayer()) {
+                    ConsoleHelper.write(entry.getValue(), "Hi " + game.getPlayer().getName()
                             + "! My power is: " + entry.getValue().getCharacterType().getPowerType());
                 }
             }
 
-            ConsoleUtil.writeGaia("As you know your power is: " + gameState.getMainPlayer().getCharacterType().getPowerType());
-            ConsoleUtil.writeGaia("Let's start the game. Good luck!");
+            ConsoleHelper.writeGaia("As you know your power is: " + game.getPlayer().getCharacterType().getPowerType());
+            ConsoleHelper.writeGaia("Let's start the game. Good luck!");
 
         } catch (ConsoleMessagesException e) {
-            ConsoleUtil.writeError(e.getMessage());
+            ConsoleHelper.writeError(e.getMessage());
 
         } catch (Exception e) {
-            ConsoleUtil.writeError("Something went wrong, sorry for inconvenience!");
+            ConsoleHelper.writeError("Something went wrong, sorry for inconvenience!");
         }
     }
 

@@ -1,38 +1,29 @@
-package pl.suszczynski.planeteers.data.player;
+package pl.suszczynski.planeteers.data.character.positive;
 
-import pl.suszczynski.planeteers.data.Characterable;
-import pl.suszczynski.planeteers.data.ColorType;
+import pl.suszczynski.planeteers.data.character.Characterable;
+import pl.suszczynski.planeteers.data.character.ColorType;
 
 import java.io.Serializable;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by daniel on 14.05.16.
  */
-public class Player implements Serializable, Characterable {
+public abstract class PositiveCharacter implements Serializable, Characterable {
 
-    private String name;
     private PositiveCharacterType characterType;
     private Integer strength;
     private Integer life;
 
-    protected Player(String name, PositiveCharacterType characterType) {
-        this(characterType);
-
-        this.name = name;
-    }
-
-    public Player(PositiveCharacterType characterType) {
+    protected PositiveCharacter(PositiveCharacterType characterType) {
         this.characterType = characterType;
         this.strength = characterType.getStrength();
     }
 
     @Override
     public String getName() {
-        if (name == null) {
-            return characterType.getName();
-        }
-
-        return name;
+        return characterType.getName();
     }
 
     @Override

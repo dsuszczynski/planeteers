@@ -1,15 +1,14 @@
-package pl.suszczynski.planeteers.data.enemy;
+package pl.suszczynski.planeteers.data.character.negative;
 
 
-import pl.suszczynski.planeteers.data.CharacterType;
-import pl.suszczynski.planeteers.data.Characterable;
-import pl.suszczynski.planeteers.data.ColorType;
-import pl.suszczynski.planeteers.data.PowerType;
-import pl.suszczynski.planeteers.data.player.Player;
+import pl.suszczynski.planeteers.data.character.CharacterType;
+import pl.suszczynski.planeteers.data.character.ColorType;
+import pl.suszczynski.planeteers.data.character.PowerType;
+import pl.suszczynski.planeteers.data.character.positive.PositiveCharacter;
 
 /**
  * In a whole game are 7 positive characters.
- * @see Player - every positive character can be initialized as Player.
+ * @see PositiveCharacter - every positive character can be initialized as PositiveCharacter.
  *
  * Created by daniel on 14.05.16.
  */

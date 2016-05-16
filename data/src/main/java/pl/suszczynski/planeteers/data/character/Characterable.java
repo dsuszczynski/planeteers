@@ -1,6 +1,4 @@
-package pl.suszczynski.planeteers.data;
-
-import java.util.Map;
+package pl.suszczynski.planeteers.data.character;
 
 /**
  * Created by daniel on 14.05.16.

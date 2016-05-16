@@ -1,8 +1,8 @@
 package pl.suszczynski.planeteers;
 
 import org.apache.log4j.Logger;
-import pl.suszczynski.planeteers.data.GameState;
-import pl.suszczynski.planeteers.utility.ConsoleUtil;
+import pl.suszczynski.planeteers.data.game.Game;
+import pl.suszczynski.planeteers.helper.ConsoleHelper;
 
 /**
  * Created by daniel on 14.05.16.
@@ -14,19 +14,19 @@ public class Actions {
     private Actions() {
     }
 
-    public static void exit(GameState gameState) {
+    public static void exit(Game game) {
 
         LOGGER.info("Action: EXIT");
 
-        if (gameState != null && !gameState.isSaved()) {
-            ConsoleUtil.writeGaia("Are you sure you want to leave us without saving game?");
-            if (!ConsoleUtil.readYN()) {
-                ConsoleUtil.readCommand(gameState);
+        if (game != null && !game.isSaved()) {
+            ConsoleHelper.writeGaia("Are you sure you want to leave us without saving game?");
+            if (!ConsoleHelper.readYN()) {
+                ConsoleHelper.readCommand(game);
             } else {
-                ConsoleUtil.writeGaia("Have a nice day!");
+                ConsoleHelper.writeGaia("Have a nice day!");
             }
         } else {
-            ConsoleUtil.writeGaia("Have a nice day!");
+            ConsoleHelper.writeGaia("Have a nice day!");
         }
     }
 }

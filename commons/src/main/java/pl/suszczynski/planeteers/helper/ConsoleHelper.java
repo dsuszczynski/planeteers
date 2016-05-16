@@ -1,14 +1,13 @@
-package pl.suszczynski.planeteers.utility;
+package pl.suszczynski.planeteers.helper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
 import pl.suszczynski.planeteers.Actions;
-import pl.suszczynski.planeteers.ConsoleCommandType;
-import pl.suszczynski.planeteers.data.Characterable;
-import pl.suszczynski.planeteers.data.ColorType;
-import pl.suszczynski.planeteers.data.GameState;
-import pl.suszczynski.planeteers.data.player.Player;
+import pl.suszczynski.planeteers.data.character.Characterable;
+import pl.suszczynski.planeteers.data.character.ColorType;
+import pl.suszczynski.planeteers.data.character.negative.NegativeCharacter;
+import pl.suszczynski.planeteers.data.character.positive.PositiveCharacter;
+import pl.suszczynski.planeteers.data.game.Game;
 import pl.suszczynski.planeteers.exception.ConsoleMessagesException;
 
 import java.io.BufferedReader;
@@ -19,13 +18,13 @@ import java.util.*;
 import static java.lang.System.out;
 
 /**
- * {@link ConsoleUtil} is a utility class responsible for preparation a console output in perspicuous way.
+ * {@link ConsoleHelper} is a utility class responsible for preparation a console output in perspicuous way.
  *
  * Created by daniel on 14.05.16.
  */
-public class ConsoleUtil {
+public class ConsoleHelper {
 
-    private static final Logger LOGGER = Logger.getLogger(ConsoleUtil.class);
+    private static final Logger LOGGER = Logger.getLogger(ConsoleHelper.class);
 
     private static final String RESET = "\u001B[0m";
     private static final String BOLD = "\u001B[1m";
@@ -39,14 +38,14 @@ public class ConsoleUtil {
 
     private static final List<String> CONFIRMATIONS = new ArrayList<>(Arrays.asList("Y", "N"));
 
-    private static ConsoleUtil instance;
+    private static ConsoleHelper instance;
     private static ResourceBundle resourceBundle;
 
     /**
      * Use properties resource: ConsoleMessages.properties
      * @throws ConsoleMessagesException
      */
-    private ConsoleUtil() throws ConsoleMessagesException {
+    private ConsoleHelper() throws ConsoleMessagesException {
 
         try {
             resourceBundle = ResourceBundle.getBundle(RESOURCE_NAME);
@@ -57,10 +56,10 @@ public class ConsoleUtil {
         }
     }
 
-    private static ConsoleUtil getInstance() throws ConsoleMessagesException {
+    private static ConsoleHelper getInstance() throws ConsoleMessagesException {
 
         if (instance == null) {
-            instance = new ConsoleUtil();
+            instance = new ConsoleHelper();
         }
 
         return instance;
@@ -76,10 +75,10 @@ public class ConsoleUtil {
     }
 
     /**
-     * This method write directly on CLI what Player wants to say.
+     * This method write directly on CLI what PositiveCharacter wants to say.
      *
-     * @param character - can be good {@link Player} or bad {@link pl.suszczynski.planeteers.data.enemy.Enemy}
-     * @param statement - sentence which Player wants to say
+     * @param character - can be good {@link PositiveCharacter} or bad {@link NegativeCharacter}
+     * @param statement - sentence which PositiveCharacter wants to say
      */
     public static void write(Characterable character, String statement) {
         StringBuilder intro = new StringBuilder();
@@ -91,7 +90,7 @@ public class ConsoleUtil {
     }
 
     /**
-     * Write welcome on CLI to greet new Player.
+     * Write welcome on CLI to greet new PositiveCharacter.
      */
     public static void writeWelcome() throws ConsoleMessagesException {
         out.println(BOLD + "WELCOME IN " + UNDERLINE + getInstance().resourceBundle.getString("gameName") + RESET + " CLI game!\n");
@@ -106,7 +105,7 @@ public class ConsoleUtil {
      *
      * @return
      */
-    public static void readCommand(GameState gameState) {
+    public static void readCommand(Game game) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.print("Enter command: ");
@@ -116,7 +115,7 @@ public class ConsoleUtil {
 
             if (commandType == null) {
                 writeError("Command unknown :( Try again.");
-                readCommand(gameState);
+                readCommand(game);
 
             } else {
                 LOGGER.info("Recognized console command: " + commandType);
@@ -139,19 +138,19 @@ public class ConsoleUtil {
                     case GAME_SAVE:
                         break;
                     case GAME_EXIT:
-                        Actions.exit(gameState);
+                        Actions.exit(game);
                         break;
                     case HELP:
                         break;
                     default:
-                        readCommand(gameState);
+                        readCommand(game);
                 }
             }
 
         } catch (IOException e) {
             LOGGER.info("Problem with reading command!", e);
             writeError("Command could not be read :( Try again.");
-            readCommand(gameState);
+            readCommand(game);
         }
     }
 
