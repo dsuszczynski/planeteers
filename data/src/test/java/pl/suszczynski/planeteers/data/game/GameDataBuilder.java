@@ -2,6 +2,7 @@ package pl.suszczynski.planeteers.data.game;
 
 import pl.suszczynski.planeteers.data.DataBuilder;
 import pl.suszczynski.planeteers.data.character.positive.Player;
+import pl.suszczynski.planeteers.data.character.positive.PlayerDataBuilder;
 import pl.suszczynski.planeteers.data.character.positive.PositiveCharacter;
 import pl.suszczynski.planeteers.data.character.positive.PositiveCharacterType;
 
@@ -38,8 +39,7 @@ public class GameDataBuilder extends DataBuilder<Game> {
 
         Map<PositiveCharacterType, PositiveCharacter> positiveCharacters = new LinkedHashMap<>();
 
-        Player player = new Player("Hanna", PositiveCharacterType.LINKA);
-        player.setLife();
+        Player player = PlayerDataBuilder.builder().withData().build();
         positiveCharacters.put(player.getCharacterType(), player);
 
         data.setPositiveCharacters(positiveCharacters);

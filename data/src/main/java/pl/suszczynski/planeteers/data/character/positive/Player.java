@@ -13,8 +13,14 @@ public class Player extends Planeteer {
         this.name = name;
     }
 
+    Player() {}
+
     @Override
     public String getName() {
         return name;
+    }
+
+    void setName(String name) {
+        this.name = name;
     }
 }

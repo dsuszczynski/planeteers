@@ -22,8 +22,6 @@ public class GameRunner {
         try {
             ConsoleHelper.writeWelcome();
 
-            ConsoleHelper.readCommand(game);
-
             try {
                 game = new Game();
                 game = GameUtils.configure(game, "Hania", PositiveCharacterType.KWAME, GameDifficultyType.MEDIUM);
@@ -48,6 +46,9 @@ public class GameRunner {
 
             ConsoleHelper.writeGaia("As you know your power is: " + game.getPlayer().getCharacterType().getPowerType());
             ConsoleHelper.writeGaia("Let's start the game. Good luck!");
+
+            ConsoleHelper.writeGaia("That's all for now. Just write 'exit' to leave.");
+            ConsoleHelper.readCommand(game);
 
         } catch (ConsoleMessagesException e) {
             ConsoleHelper.writeError(e.getMessage());

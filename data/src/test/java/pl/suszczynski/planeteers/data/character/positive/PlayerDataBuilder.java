@@ -23,9 +23,10 @@ public class PlayerDataBuilder extends DataBuilder<Player> {
     }
 
     public PlayerDataBuilder withData(String name, Integer life, Integer strength, PositiveCharacterType characterType) {
-        Player player = new Player(name, characterType);
-        player.setLife(life);
-        player.setStrength(strength);
+        data.setName(name);
+        data.setCharacterType(characterType);
+        data.setLife(life);
+        data.setStrength(strength);
 
         return this;
     }

@@ -5,7 +5,10 @@ package pl.suszczynski.planeteers.data.character;
  */
 public interface CharacterType {
     String getName();
+
     ColorType getColorType();
+
     Integer getStrength();
+
     String getCliShortcut();
 }

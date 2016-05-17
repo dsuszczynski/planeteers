@@ -9,7 +9,7 @@ public class NegativeCharacterUtils {
 
     private static final Logger LOGGER = Logger.getLogger(NegativeCharacterUtils.class);
 
-    private NegativeCharacterUtils() {
+    protected NegativeCharacterUtils() {
     }
 
 }

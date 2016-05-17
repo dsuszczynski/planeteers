@@ -6,6 +6,7 @@ package pl.suszczynski.planeteers.data.character;
 public interface Characterable {
 
     String getName();
+
     ColorType getColorType();
 
     /**
@@ -15,5 +16,8 @@ public interface Characterable {
      * @return
      */
     Integer getLife();
+
     CharacterType getCharacterType();
+
+    Integer getStrength();
 }

@@ -5,12 +5,11 @@ import pl.suszczynski.planeteers.data.character.ColorType;
 
 import java.io.Serializable;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by daniel on 14.05.16.
  */
-public abstract class PositiveCharacter implements Serializable, Characterable {
+public abstract class PositiveCharacter extends Observable implements Serializable, Characterable {
 
     private PositiveCharacterType characterType;
     private Integer strength;
@@ -20,6 +19,8 @@ public abstract class PositiveCharacter implements Serializable, Characterable {
         this.characterType = characterType;
         this.strength = characterType.getStrength();
     }
+
+    PositiveCharacter() {}
 
     @Override
     public String getName() {
@@ -34,6 +35,10 @@ public abstract class PositiveCharacter implements Serializable, Characterable {
     @Override
     public PositiveCharacterType getCharacterType() {
         return characterType;
+    }
+
+    void setCharacterType(PositiveCharacterType characterType) {
+        this.characterType = characterType;
     }
 
     public Integer getStrength() {

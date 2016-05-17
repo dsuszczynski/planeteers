@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import pl.suszczynski.planeteers.data.character.negative.NegativeCharacter;
 import pl.suszczynski.planeteers.data.character.positive.*;
 import pl.suszczynski.planeteers.data.game.Game;
+import pl.suszczynski.planeteers.exception.CaptainPlanetDefeatedException;
 import pl.suszczynski.planeteers.exception.GameOverException;
 
 import java.util.Map;
@@ -29,46 +30,53 @@ public class Fight {
      * Rules:
      * - {@link Planeteer} when life <= 0 than {@link Planeteer} is dead and removed from Game.
      * - {@link Player} when life <= 0 than Game is OVER!
-     * - {@link CaptainPlanet} live is a SUM of all {@link Planeteer}s lifes.
-     *      When {@link CaptainPlanet} gets hit life of each {@link Planeteer}s can go below 1,
-     *      the exception is {@link Player} (when {@link Player}s life gets below 1 Game is OVER).
+     * - {@link CaptainPlanet} live is a SUM of all {@link Planeteer}s lifes. It works as a {@link java.util.Observer}
+     *      When {@link CaptainPlanet} gets hit life of each {@link Planeteer}s can not go below 1,
+     *      if {@link Planeteer}s lifes can not be reduced anymore, {@link CaptainPlanet} disappears and {@link Planeteer}s
+     *          needs to fight without him.
      *
-     * @param character
+     * @param positiveCharacter
      * @param units
      */
-    public Integer hitPositiveCharacter(PositiveCharacter character, Integer units) throws GameOverException {
+    public Integer hitPositiveCharacter(PositiveCharacter positiveCharacter, NegativeCharacter negativeCharacter, Integer units)
+            throws GameOverException, CaptainPlanetDefeatedException {
 
-        character.setLife(character.getLife() - units);
+        if (positiveCharacter instanceof Player) {
+            ((Player) positiveCharacter).gotHit(units);
 
-        if (character instanceof Player) {
-
-            if (character.getLife() <= 0) {
+            if (positiveCharacter.getLife() <= 0) {
                 throw new GameOverException();
             }
 
-        } else if (character instanceof CaptainPlanet) {
-
+        } else if (positiveCharacter instanceof CaptainPlanet) { // is an Observer
             int unitsLeft = units;
 
-            for (Map.Entry<PositiveCharacterType, Planeteer> planeteerEntry : game.getPlaneteers().entrySet()) {
-                Planeteer planeteer = planeteerEntry.getValue();
-                planeteer.setLife(planeteer.getLife() - LIFE_DECREMENTATION_PER_CHARACTER);
-                unitsLeft--;
+            int numberOfPlaneteers;
+            do {
+                Map<PositiveCharacterType, Planeteer> planeteers = game.getPlaneteers();
+                numberOfPlaneteers = planeteers.size() + 1;
+
+                // when any of Planeteers got hit the Captain Planet life gets reduce as well
+                for (Map.Entry<PositiveCharacterType, Planeteer> planeteerEntry : game.getPlaneteers().entrySet()) {
+                    Planeteer planeteer = planeteerEntry.getValue();
+
+                    if (planeteer.getLife() > 1) {
+                        planeteer.gotHit(LIFE_DECREMENTATION_PER_CHARACTER);
+                        unitsLeft--;
+                    }
+                }
+
+            } while (unitsLeft > 0 && positiveCharacter.getLife() > numberOfPlaneteers && game.getPlayer().getLife() > 1);
+
+            if (unitsLeft > 0) {
+                throw new CaptainPlanetDefeatedException();
             }
 
-            // hit Player as last one to increase chance to survive fight
-            if (unitsLeft > 0) {
-                hitPositiveCharacter(game.getPlayer(), LIFE_DECREMENTATION_PER_CHARACTER);
-                unitsLeft--;
-            }
-
-            // hit Captain Planet recursively as next round
-            if (unitsLeft > 0) {
-                hitPositiveCharacter(character, unitsLeft);
-            }
+        } else {
+            ((Planeteer) positiveCharacter).gotHit(units);
         }
 
-        return character.getLife();
+        return positiveCharacter.getLife();
     }
 
     /**

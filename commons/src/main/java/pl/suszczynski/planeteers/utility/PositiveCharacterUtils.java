@@ -25,7 +25,7 @@ public class PositiveCharacterUtils {
      * Use properties resource: PlayersDefaultValues.properties
      * @throws PositiveCharacterDefaultValuesException
      */
-    private PositiveCharacterUtils() throws PositiveCharacterDefaultValuesException {
+    protected PositiveCharacterUtils() throws PositiveCharacterDefaultValuesException {
 
         try {
             resourceBundle = ResourceBundle.getBundle(RESOURCE_NAME);

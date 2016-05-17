@@ -7,6 +7,7 @@ import pl.suszczynski.planeteers.data.game.Game;
 import pl.suszczynski.planeteers.exception.PositiveCharacterDefaultValuesException;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by daniel on 14.05.16.
@@ -15,7 +16,7 @@ public class GameUtils {
 
     private static final Logger LOGGER = Logger.getLogger(GameUtils.class);
 
-    private GameUtils() {
+    protected GameUtils() {
     }
 
     public static Game configure(Game game, String playerName, PositiveCharacterType playerType, GameDifficultyType gameDifficultyType) throws PositiveCharacterDefaultValuesException {
@@ -24,7 +25,7 @@ public class GameUtils {
         // configure PositiveCharacters
         {
             // reset PositiveCharacters
-            game.setPositiveCharacters(new LinkedHashMap<PositiveCharacterType, PositiveCharacter>());
+            game.setPositiveCharacters(new LinkedHashMap<>());
 
             // configure positive characters - Player, Planeteers, and Captain Planet
             for (PositiveCharacterType characterType : PositiveCharacterType.values()) {
@@ -42,6 +43,13 @@ public class GameUtils {
 
                 game.getPositiveCharacters().put(characterType, positiveCharacter);
             }
+
+            // configure observers for planeteers
+            for (Map.Entry<PositiveCharacterType, Planeteer> entry : game.getPlaneteers().entrySet()) {
+                entry.getValue().addObserver(game.getCaptainPlanet());
+                entry.getValue().addObserver(game);
+            }
+
         }
 
         return game;

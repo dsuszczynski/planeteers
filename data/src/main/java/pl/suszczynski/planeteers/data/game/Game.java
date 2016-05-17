@@ -7,12 +7,16 @@ import pl.suszczynski.planeteers.data.character.positive.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.stream.Collectors;
 
 /**
  * Created by daniel on 14.05.16.
  */
-public class Game implements Serializable {
+public class Game implements Serializable, Observer {
+
+    private static final int PLANETEERS_NUMBER = 5;
 
     private Map<PositiveCharacterType, PositiveCharacter> positiveCharacters = new LinkedHashMap<>();
     private Integer level = 1;
@@ -67,26 +71,48 @@ public class Game implements Serializable {
     }
 
     /**
-     * Return {@link CaptainPlanet} if {@link Planeteer}s call him
-     * and it was possible to initialize him.
+     * Return {@link CaptainPlanet} if {@link Planeteer}s "call him" and it was possible to initialize him.
      *
-     * The condition to initialize {@link CaptainPlanet} is that all {@link Planeteer}s are alive and call him together.
+     * The condition to initialize {@link CaptainPlanet} is that all {@link Planeteer}s are alive.
      *
      * @return
      */
     public CaptainPlanet getCaptainPlanet() {
 
-        // TODO : refactor since Captain Planet is a observer
-        if (captainPlanet == null) {
-            for (Map.Entry<PositiveCharacterType, PositiveCharacter> entry : positiveCharacters.entrySet()) {
-                if (entry.getValue() instanceof CaptainPlanet) {
-                    captainPlanet = (CaptainPlanet) entry.getValue();
-                    break;
+        if (getPlaneteers().size() == PLANETEERS_NUMBER) {
+            if (captainPlanet == null) {
+                for (Map.Entry<PositiveCharacterType, PositiveCharacter> entry : positiveCharacters.entrySet()) {
+                    if (entry.getValue() instanceof CaptainPlanet) {
+                        captainPlanet = (CaptainPlanet) entry.getValue();
+                        break;
+                    }
                 }
             }
+
+        } else {
+            captainPlanet = null;
         }
 
         return captainPlanet;
+    }
+
+    /**
+     * Update when Planeteer got hit.
+     *
+     * @param o {@link Planeteer}
+     * @param force {@link Integer}
+     */
+    @Override
+    public void update(Observable o, Object force) {
+        if (o instanceof Planeteer && force instanceof Integer) {
+            Planeteer planeteer = (Planeteer) o;
+
+            positiveCharacters.remove(planeteer.getCharacterType());
+
+            if (planeteer.getLife() > 0) {
+                positiveCharacters.put(planeteer.getCharacterType(), planeteer);
+            }
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package pl.suszczynski.planeteers.data.character.negative;
 
 import pl.suszczynski.planeteers.data.character.Characterable;
 import pl.suszczynski.planeteers.data.character.ColorType;
+import pl.suszczynski.planeteers.data.character.positive.PositiveCharacter;
 
 import java.io.Serializable;
 
@@ -19,6 +20,15 @@ public abstract class NegativeCharacter implements Serializable, Characterable {
         this.strength = characterType.getStrength();
         this.life = characterType.getLife();
     }
+
+    /**
+     * Every {@link pl.suszczynski.planeteers.data.character.negative.NegativeCharacter} can got hit.
+     * Depends of character who got hit and hit the implementation is different.
+     *
+     * @param force
+     * @return
+     */
+    public abstract Integer gotHit(Integer force, PositiveCharacter character);
 
     @Override
     public String getName() {

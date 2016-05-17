@@ -45,7 +45,7 @@ public class ConsoleHelper {
      * Use properties resource: ConsoleMessages.properties
      * @throws ConsoleMessagesException
      */
-    private ConsoleHelper() throws ConsoleMessagesException {
+    protected ConsoleHelper() throws ConsoleMessagesException {
 
         try {
             resourceBundle = ResourceBundle.getBundle(RESOURCE_NAME);
